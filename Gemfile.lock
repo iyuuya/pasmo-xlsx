@@ -1,0 +1,45 @@
+GEM
+  remote: https://rubygems.org/
+  specs:
+    axlsx (2.0.1)
+      htmlentities (~> 4.3.1)
+      nokogiri (>= 1.4.1)
+      rubyzip (~> 1.0.0)
+    backports (3.15.0)
+    htmlentities (4.3.4)
+    mini_portile2 (2.4.0)
+    multi_json (1.13.1)
+    mustermann (1.0.3)
+    nokogiri (1.10.4)
+      mini_portile2 (~> 2.4.0)
+    rack (2.0.7)
+    rack-protection (2.0.7)
+      rack
+    rubyzip (1.0.0)
+    sinatra (2.0.7)
+      mustermann (~> 1.0)
+      rack (~> 2.0)
+      rack-protection (= 2.0.7)
+      tilt (~> 2.0)
+    sinatra-contrib (2.0.7)
+      backports (>= 2.8.2)
+      multi_json
+      mustermann (~> 1.0)
+      rack-protection (= 2.0.7)
+      sinatra (= 2.0.7)
+      tilt (~> 2.0)
+    tilt (2.0.9)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  axlsx
+  sinatra
+  sinatra-contrib
+
+RUBY VERSION
+   ruby 2.6.3p62
+
+BUNDLED WITH
+   2.0.2
