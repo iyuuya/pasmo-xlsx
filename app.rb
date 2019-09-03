@@ -1,45 +1,35 @@
 # frozen_string_literal: true
 
+$LOAD_PATH.unshift File.join(__dir__, 'lib')
+
+APP_ENV = ENV.fetch('APP_ENV', 'production').to_sym
+
+require 'bundler/setup'
+Bundler.require(:default, APP_ENV)
+
+configure :development do
+  register Sinatra::Reloader
+end
+
 require 'nkf'
 require 'csv'
-require 'axlsx'
+require 'pasmo_csv_converter'
 
-require 'sinatra'
+set :environment, APP_ENV
 
 get '/' do
   erb :index
 end
 
 post '/upload' do
-  Dir.mkdir('tmp') unless Dir.exist? 'tmp'
-  Dir['tmp/*.xlsx'].each { |f| File.delete f }
+  PasmoCsvConverter.create_temp_directory
+  PasmoCsvConverter.remove_temp_files
 
-  file = params[:csv][:tempfile]
-  basename = File.basename(params[:csv][:filename], '.csv')
-  xlsx_name = "#{basename}.xlsx"
-  path = "tmp/#{xlsx_name}"
+  converter = PasmoCsvConverter.new(
+    params[:csv][:tempfile].read,
+    params[:csv][:filename]
+  )
+  converter.call
 
-  Axlsx::Package.new do |package|
-    package.use_autowidth = true
-
-    package.workbook do |wb|
-      borders = wb.styles.add_style border: { style: :thin, color: 'F000000', name: :borders, edges: %i[top right bottom left] }
-
-      wb.add_worksheet(name: basename, page_setup: { fit_to_width: 1, orientation: :landscape, paper_size: 9 }) do |sheet|
-        count = 0
-        CSV.parse(NKF.nkf('-w', file.read)) do |row|
-          if count == 0
-            sheet.add_row row
-          else
-            sheet.add_row row, style: borders
-          end
-          count += 1
-        end
-        sheet.add_row [nil, nil, nil, nil, nil, nil, '合計金額', "=SUMIFS(H3:H#{count}, H3:H#{count}, \">0\")", nil, nil], style: borders
-      end
-      package.serialize path
-    end
-  end
-
-  send_file path, filename: xlsx_name
+  send_file converter.xlsx_path, filename: converter.xlsx_name
 end
