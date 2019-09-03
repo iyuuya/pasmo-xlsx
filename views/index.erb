@@ -1,4 +1,10 @@
-<form id="upload" action="/upload" method="post" enctype="multipart/form-data">
-  <input type="file" name="csv" accept="text/csv"/>
-  <input type="submit" />
-</form>
+<div class="uk-container">
+  <form id="upload" action="/upload" method="post" enctype="multipart/form-data">
+    <div uk-form-custom="target: true">
+      <input type="file" name="csv" accept="text/csv"/>
+      <input class="uk-input uk-form-width-medium" type="text" placeholder="Select file" disabled>
+    </div>
+
+    <button class="uk-button uk-button-default">Submit</button>
+  </form>
+</div>
