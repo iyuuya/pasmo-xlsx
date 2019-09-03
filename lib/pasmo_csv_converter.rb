@@ -35,7 +35,7 @@ class PasmoCsvConverter
           end
 
           row = sheet.add_row [nil, nil, nil, nil, nil, nil, '合計金額', "=SUMIFS(H3:H#{count}, H3:H#{count}, \">0\")", nil, nil]
-          row.cells.to_ary.select { |cell| !cell.value.nil? }.each { cell.style = borders }
+          row.cells.to_ary.select { |cell| !cell.value.nil? }.each { |cell| cell.style = borders }
         end
         package.serialize xlsx_path
       end
